@@ -1,3 +1,7 @@
 @import '@mantine/core/styles.css';
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
+
+* {
+  /* border: 1px solid black; */
+}

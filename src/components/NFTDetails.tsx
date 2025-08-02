@@ -1,4 +1,4 @@
-import { Card, Title, Text, Badge, Group } from '@mantine/core';
+import { Title, Text, Flex, SimpleGrid } from '@mantine/core';
 import type { NFT } from '../types/nft';
 
 interface NFTDetailsProps {
@@ -7,27 +7,24 @@ interface NFTDetailsProps {
 
 export function NFTDetails({ nft }: NFTDetailsProps) {
   return (
-    <Card>
+    <Flex justify="left" align="left" direction="column" gap='md'>
       <Title order={1} className="mb-4">
         {nft.metadata.name}
+        <Text c="dimmed">You own 0</Text>
       </Title>
-      
-      <Text className="mb-6 text-gray-600">
-        {nft.metadata.description}
-      </Text>
 
-      <div className="space-y-4">
+      <Text c="dimmed">{nft.metadata.description}</Text>
+
+      <SimpleGrid cols={3}>
         {nft.metadata.attributes.map((attr, index) => (
-          <Group key={index} justify="space-between">
-            <Text size="sm" className="text-gray-500 uppercase">
-              {attr.trait_type}
+          <Flex justify="left" align="left" direction="column" gap="xs" key={index} p="md" bd="1px solid dimmed">
+            <Text c="dimmed">
+              {attr.trait_type.toUpperCase()}
             </Text>
-            <Badge variant="light">
-              {attr.value}
-            </Badge>
-          </Group>
+            <Text>{attr.value}</Text>
+          </Flex>
         ))}
-      </div>
-    </Card>
+      </SimpleGrid>
+    </Flex>
   );
 }

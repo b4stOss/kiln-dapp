@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Grid, Loader, Center, Flex } from '@mantine/core';
+import { Container, Grid, Loader, Center, Flex, Stack, Space } from '@mantine/core';
 import { useNFT } from './hooks/useNFT';
 import { Header } from './components/Header';
 import { NFTImage } from './components/NFTImage';
@@ -7,6 +7,7 @@ import { NFTDetails } from './components/NFTDetails';
 import { ClaimPanel } from './components/ClaimPanel';
 import { NFTGallery } from './components/NFTGallery';
 import { Footer } from './components/Footer';
+import { InfoCard } from './components/InfoCard';
 
 function App() {
   const [selectedNFTId, setSelectedNFTId] = useState('2'); // Start avec KILN #3
@@ -26,29 +27,34 @@ function App() {
   if (!nft) return <div>NFT not found</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Container size={1440}>
       <Header />
+      <Space h="lg" />
 
-      <Container size="xl" py="xl">
-        {/* Main Content */}
-        <Grid className="mb-8">
-          <Grid.Col span={6}>
-            <NFTImage nft={nft} />
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Flex justify="left" align="left" direction="column">
-              <NFTDetails nft={nft} />
-              <ClaimPanel nft={nft} />
-            </Flex>
-          </Grid.Col>
-        </Grid>
+      <Container size={1280}>
+        <Stack align="stretch" justify="flex-start" gap="xl">
+          {/* Main Content */}
+          <Grid gutter={32}>
+            <Grid.Col span={6}>
+              <NFTImage nft={nft} />
+              <Space h="md" />
+              <InfoCard />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Flex justify="left" align="left" direction="column" gap="xl">
+                <NFTDetails nft={nft} />
+                <ClaimPanel nft={nft} />
+              </Flex>
+            </Grid.Col>
+          </Grid>
 
-        {/* Gallery */}
-        <NFTGallery selectedId={selectedNFTId} onSelect={setSelectedNFTId} />
+          {/* Gallery */}
+          <NFTGallery selectedId={selectedNFTId} onSelect={setSelectedNFTId} />
+        </Stack>
       </Container>
 
       <Footer />
-    </div>
+    </Container>
   );
 }
 
