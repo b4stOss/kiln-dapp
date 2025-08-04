@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { notifications } from '@mantine/notifications';
 import type { ClaimState } from '../types/nft';
+import { getCleanErrorMessage } from '../utils/errorMessages';
 
 const CLAIM_ABI = [
   {
@@ -36,18 +38,35 @@ export function useClaim(contractAddress: `0x${string}`) {
 
   useEffect(() => {
     if (isConfirmed && hash) {
+      notifications.hide('claiming');
       setClaimState({ status: 'success', txHash: hash });
+      notifications.show({
+        title: '✅ Claim Successful!',
+        message: 'Your NFT has been successfully claimed and added to your wallet !',
+        color: 'green',
+        autoClose: 10000,
+      });
     }
     if (receiptError) {
-      setClaimState({ 
-        status: 'error', 
-        error: receiptError.message || 'Transaction failed' 
+      notifications.hide('claiming');
+      const cleanError = getCleanErrorMessage(receiptError.message || 'Transaction failed');
+      setClaimState({ status: 'error', error: cleanError });
+      notifications.show({
+        title: '❌ Transaction Failed',
+        message: cleanError,
+        color: 'red',
+        autoClose: 7000,
       });
     }
     if (writeError) {
-      setClaimState({ 
-        status: 'error', 
-        error: writeError.message || 'Transaction rejected' 
+      notifications.hide('claiming');
+      const cleanError = getCleanErrorMessage(writeError.message || 'Transaction rejected');
+      setClaimState({ status: 'error', error: cleanError });
+      notifications.show({
+        title: '❌ Transaction Error',
+        message: cleanError,
+        color: 'red',
+        autoClose: 7000,
       });
     }
   }, [isConfirmed, receiptError, writeError, hash]);
@@ -55,6 +74,15 @@ export function useClaim(contractAddress: `0x${string}`) {
   const claim = async (tokenId: string, to: `0x${string}`) => {
     try {
       setClaimState({ status: 'pending' });
+      
+      notifications.show({
+        id: 'claiming',
+        title: '⏳ Claiming NFT...',
+        message: 'Please confirm the transaction in your wallet',
+        color: 'black',
+        loading: true,
+        autoClose: false,
+      });
       
       writeContract({
         address: contractAddress,

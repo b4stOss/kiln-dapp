@@ -54,27 +54,6 @@ export function ClaimPanel({ nft }: ClaimPanelProps) {
         </Button>
       )}
 
-      {claimState.status === 'success' && claimState.txHash && (
-        <Text size="sm" style={{ color: '#28a745' }}>
-          ✅ Successfully claimed! 
-          <br />
-          <Text 
-            component="a" 
-            href={`https://sepolia.basescan.org/tx/${claimState.txHash}`}
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ textDecoration: 'underline', color: '#28a745' }}
-          >
-            View on BaseScan
-          </Text>
-        </Text>
-      )}
-
-      {claimState.status === 'error' && (
-        <Text size="sm" style={{ color: '#dc3545' }}>
-          ❌ {claimState.error}
-        </Text>
-      )}
     </Flex>
   );
 }
