@@ -1,6 +1,7 @@
 import { Text, Button, Group, Badge, Flex } from '@mantine/core';
 import { useWallet } from '../hooks/useWallet';
 import { useClaim } from '../hooks/useClaim';
+import { useNFTBalance } from '../hooks/useNFTBalance';
 import type { NFT } from '../types/nft';
 import ethLogo from '../assets/eth.svg';
 
@@ -10,7 +11,8 @@ interface ClaimPanelProps {
 
 export function ClaimPanel({ nft }: ClaimPanelProps) {
   const { address, isConnected, isCorrectChain, connect, ensureCorrectChain } = useWallet();
-  const { claim, claimState, isConfirming } = useClaim(nft.tokenAddress);
+  const { refetch } = useNFTBalance(nft.tokenAddress, nft.id);
+  const { claim, claimState, isConfirming } = useClaim(nft.tokenAddress, refetch);
 
   const handleClaim = async () => {
     if (!address) return;

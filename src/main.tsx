@@ -12,6 +12,10 @@ const queryClient = new QueryClient();
 
 const theme = createTheme({
   primaryColor: 'black',
+  fontFamily: 'Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+  headings: {
+    fontFamily: 'Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+  },
   colors: {
     black: [
       '#ffffff', // 0 - blanc

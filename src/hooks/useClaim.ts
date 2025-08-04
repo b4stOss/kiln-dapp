@@ -27,7 +27,7 @@ const CLAIM_ABI = [
   }
 ] as const;
 
-export function useClaim(contractAddress: `0x${string}`) {
+export function useClaim(contractAddress: `0x${string}`, balanceRefetch?: () => void) {
   const [claimState, setClaimState] = useState<ClaimState>({ status: 'idle' });
   
   const { writeContract, data: hash, error: writeError } = useWriteContract();
@@ -46,6 +46,13 @@ export function useClaim(contractAddress: `0x${string}`) {
         color: 'green',
         autoClose: 10000,
       });
+
+      // Délai pour laisser le temps à la blockchain de se mettre à jour
+      setTimeout(() => {
+        if (balanceRefetch) {
+          balanceRefetch();
+        }
+      }, 3000);
     }
     if (receiptError) {
       notifications.hide('claiming');
@@ -69,7 +76,7 @@ export function useClaim(contractAddress: `0x${string}`) {
         autoClose: 7000,
       });
     }
-  }, [isConfirmed, receiptError, writeError, hash]);
+  }, [isConfirmed, receiptError, writeError, hash, balanceRefetch]);
 
   const claim = async (tokenId: string, to: `0x${string}`) => {
     try {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Grid, Loader, Center, Flex, Stack, Space } from '@mantine/core';
+import { Container, Grid, Loader, Center, Flex, Stack, Space, Divider } from '@mantine/core';
 import { useNFT } from './hooks/useNFT';
 import { Header } from './components/Header';
 import { NFTImage } from './components/NFTImage';
@@ -31,7 +31,7 @@ function App() {
       <Header />
       <Space h="lg" />
 
-      <Container size={1280}>
+      <Container size={1280} mt="xl">
         <Stack align="stretch" justify="flex-start" gap="xl">
           {/* Main Content */}
           <Grid gutter={32}>
@@ -43,6 +43,7 @@ function App() {
             <Grid.Col span={6}>
               <Flex justify="left" align="left" direction="column" gap="xl">
                 <NFTDetails nft={nft} />
+                <Divider color="dimmed" />
                 <ClaimPanel nft={nft} />
               </Flex>
             </Grid.Col>

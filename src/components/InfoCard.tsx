@@ -1,5 +1,6 @@
 import { Group, Button, Text, Stack, Box, ActionIcon, Paper } from '@mantine/core';
 import kilnLogo from '../assets/kiln.svg';
+import { IconBrandInstagram, IconBrandX } from '@tabler/icons-react';
 
 export function InfoCard() {
   return (
@@ -45,18 +46,18 @@ export function InfoCard() {
 
         {/* Liens sociaux */}
         <Group gap="lg">
-          <Group gap="xs">
-            <ActionIcon size="sm" radius="xl" variant="filled" color="dark">
-              𝕏
+          <Group gap={0}>
+            <ActionIcon size="lg" radius="xl" variant="subtle" color="gray">
+              <IconBrandX color="black" size={25} />
             </ActionIcon>
             <Text size="sm" c="dark">
               @Kiln
             </Text>
           </Group>
 
-          <Group gap="xs">
-            <ActionIcon size="sm" radius="xl" variant="filled" color="dark">
-              📷
+          <Group gap={0}>
+            <ActionIcon size="lg" radius="xl" variant="subtle" color="gray">
+              <IconBrandInstagram color="black" size={30} />
             </ActionIcon>
             <Text size="sm" c="dark">
               @Kiln

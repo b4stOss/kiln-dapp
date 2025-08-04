@@ -1,19 +1,14 @@
-import { Container, Text } from '@mantine/core';
+import { Container, Stack, Text } from '@mantine/core';
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-8">
-      <Container size="xl">
-
+    <footer>
+      <Container size="xl" bg="black" c="white" mt="xl" p="xl">
         {/* Copyright */}
-        <div className="text-center">
-          <Text size="sm" className="text-gray-400">
-            All rights reserved.
-          </Text>
-          <Text size="sm" className="text-gray-400">
-            Kiln Fullstack Team, Inc 2025
-          </Text>
-        </div>
+        <Stack align="center" justify="center" gap={0}>
+          <Text>All rights reserved.</Text>
+          <Text>Kiln Fullstack Team, Inc 2025</Text>
+        </Stack>
       </Container>
     </footer>
   );

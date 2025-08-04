@@ -1,4 +1,4 @@
-import { Card, Image, Text, Title, Loader, Center, Container, Flex, SimpleGrid } from '@mantine/core';
+import { Card, Image, Text, Title, Loader, Center, SimpleGrid, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { ipfsToHttp } from '../lib/ipfs';
@@ -18,40 +18,54 @@ export function NFTGallery({ selectedId, onSelect }: NFTGalleryProps) {
 
   if (isLoading) {
     return (
-      <Container fluid>
-        <Title order={3} className="mb-4">
-          More from this collection
-        </Title>
+      <Stack gap="lg">
+        <Title order={3}>More from this collection</Title>
         <Center>
           <Loader color="black.9" type="bars" />
         </Center>
-      </Container>
+      </Stack>
     );
   }
 
   return (
-    <Flex justify="center" align="flex-start" direction="column" gap="sm">
-      <Title order={5} className="mb-4">
-        More from this collection
-      </Title>
+    <Stack gap="lg">
+      <Title order={3}>More from this collection</Title>
 
-      <SimpleGrid cols={4}>
+      <SimpleGrid cols={4} spacing="lg">
         {otherNfts.map((nft) => (
           <Card
             key={nft.id}
-            className={`cursor-pointer transition-all hover:scale-105 ${selectedId === nft.id ? 'ring-2 ring-blue-500' : ''}`}
+            padding={0}
+            radius={0}
+            withBorder={false}
+            style={{
+              cursor: 'pointer',
+              transition: 'transform 0.2s ease',
+              backgroundColor: 'transparent',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
             onClick={() => onSelect(nft.id)}
           >
-            <Image src={ipfsToHttp(nft.metadata.image)} alt={nft.metadata.name} h={300} w={300} radius="sm" fit="cover" />
-            <Text size="sm" className="mt-2 text-center font-medium">
-              {nft.metadata.name}
-            </Text>
-            <Text size="xs" className="text-center text-gray-500">
-              0.0 ETH
-            </Text>
+            <Card.Section>
+              <Image src={ipfsToHttp(nft.metadata.image)} alt={nft.metadata.name} height={200} radius={0} fit="cover" />
+            </Card.Section>
+
+            <Stack mt="xs" justify="flex-start" gap={0}>
+              <Text fw={600}>
+                {nft.metadata.name}
+              </Text>
+              <Text size="sm" c="dimmed">
+                0.0 ETH
+              </Text>
+            </Stack>
           </Card>
         ))}
       </SimpleGrid>
-    </Flex>
+    </Stack>
   );
 }
