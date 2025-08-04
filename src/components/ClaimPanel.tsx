@@ -2,17 +2,24 @@ import { Text, Button, Group, Badge, Flex } from '@mantine/core';
 import { useWallet } from '../hooks/useWallet';
 import { useClaim } from '../hooks/useClaim';
 import type { NFT } from '../types/nft';
+import ethLogo from '../assets/eth.svg';
 
 interface ClaimPanelProps {
   nft: NFT;
 }
 
 export function ClaimPanel({ nft }: ClaimPanelProps) {
-  const { address, isConnected, connect } = useWallet();
+  const { address, isConnected, isCorrectChain, connect, ensureCorrectChain } = useWallet();
   const { claim, claimState, isConfirming } = useClaim(nft.tokenAddress);
 
   const handleClaim = async () => {
     if (!address) return;
+    
+    if (!isCorrectChain) {
+      await ensureCorrectChain();
+      return;
+    }
+    
     await claim(nft.id, address);
   };
 
@@ -20,14 +27,19 @@ export function ClaimPanel({ nft }: ClaimPanelProps) {
     <Flex justify="left" align="left" direction="column" gap="md">      
       <div>
         <Badge color="black" radius={0}>Free Mint</Badge>
-        <Group>
-          <Text size="xl" fw={700}>≈ 0 ETH</Text>
+        <Group gap="xs">
+          <img src={ethLogo} alt="Kiln" height={32} />
+          <Text size="xl" fw={700}>0 ETH</Text>
         </Group>
       </div>
 
       {!isConnected ? (
         <Button radius={0} fullWidth onClick={connect}>
           Connect Wallet
+        </Button>
+      ) : !isCorrectChain ? (
+        <Button radius={0} fullWidth onClick={ensureCorrectChain}>
+          Switch to Base Sepolia
         </Button>
       ) : (
         <Button 
@@ -42,15 +54,25 @@ export function ClaimPanel({ nft }: ClaimPanelProps) {
         </Button>
       )}
 
-      {claimState.status === 'success' && (
-        <Text size="sm" className="mt-2 text-green-600">
-          Successfully claimed! TX: {claimState.txHash?.slice(0, 10)}...
+      {claimState.status === 'success' && claimState.txHash && (
+        <Text size="sm" style={{ color: '#28a745' }}>
+          ✅ Successfully claimed! 
+          <br />
+          <Text 
+            component="a" 
+            href={`https://sepolia.basescan.org/tx/${claimState.txHash}`}
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'underline', color: '#28a745' }}
+          >
+            View on BaseScan
+          </Text>
         </Text>
       )}
 
       {claimState.status === 'error' && (
-        <Text size="sm" className="mt-2 text-red-600">
-          Error: {claimState.error}
+        <Text size="sm" style={{ color: '#dc3545' }}>
+          ❌ {claimState.error}
         </Text>
       )}
     </Flex>

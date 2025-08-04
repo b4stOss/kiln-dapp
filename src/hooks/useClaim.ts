@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import type { ClaimState } from '../types/nft';
 
@@ -28,11 +28,29 @@ const CLAIM_ABI = [
 export function useClaim(contractAddress: `0x${string}`) {
   const [claimState, setClaimState] = useState<ClaimState>({ status: 'idle' });
   
-  const { writeContract, data: hash } = useWriteContract();
+  const { writeContract, data: hash, error: writeError } = useWriteContract();
   
-  const { isLoading: isConfirming } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess: isConfirmed, error: receiptError } = useWaitForTransactionReceipt({
     hash,
   });
+
+  useEffect(() => {
+    if (isConfirmed && hash) {
+      setClaimState({ status: 'success', txHash: hash });
+    }
+    if (receiptError) {
+      setClaimState({ 
+        status: 'error', 
+        error: receiptError.message || 'Transaction failed' 
+      });
+    }
+    if (writeError) {
+      setClaimState({ 
+        status: 'error', 
+        error: writeError.message || 'Transaction rejected' 
+      });
+    }
+  }, [isConfirmed, receiptError, writeError, hash]);
 
   const claim = async (tokenId: string, to: `0x${string}`) => {
     try {
@@ -46,22 +64,18 @@ export function useClaim(contractAddress: `0x${string}`) {
           to, // _receiver
           BigInt(tokenId), // _tokenId  
           1n, // _quantity (1 NFT)
-          '0x0000000000000000000000000000000000000000', // _currency (ETH = address zero)
+          '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // _currency (ETH native token)
           0n, // _pricePerToken (free mint)
           { // _allowlistProof (empty/default)
             proof: [],
             quantityLimitPerWallet: 0n,
             pricePerToken: 0n,
-            currency: '0x0000000000000000000000000000000000000000'
+            currency: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
           },
           '0x' // _data (empty)
         ],
         value: 0n, // payableAmount (free)
       });
-
-      if (hash) {
-        setClaimState({ status: 'success', txHash: hash });
-      }
     } catch (error) {
       setClaimState({ 
         status: 'error', 
