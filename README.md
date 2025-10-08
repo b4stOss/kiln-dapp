@@ -1,69 +1,75 @@
-# React + TypeScript + Vite
+# NFT Minting dApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern NFT claiming application built on Base Sepolia testnet. Users can connect their wallet, browse NFT collections, and claim free NFTs directly from the interface.
 
-Currently, two official plugins are available:
+## 🎯 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Wallet Connection** - Connect via MetaMask or any injected Web3 wallet
+- **NFT Gallery** - Browse available NFTs with an interactive gallery
+- **Free Claiming** - Claim NFTs for free (gas only)
+- **Real-time Balance** - Track your NFT holdings automatically
+- **Transaction Notifications** - Live updates on transaction status
+- **Responsive Design** - Optimized for desktop and mobile
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Frontend**
+- React 19 + TypeScript
+- Vite (build tool)
+- Mantine UI + Tailwind CSS
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Blockchain**
+- Wagmi v2 + Viem (Ethereum interactions)
+- Base Sepolia (L2 testnet)
+- TanStack Query (state management)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🚀 Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### Prerequisites
+- Node.js 18+
+- MetaMask or compatible Web3 wallet
+- Base Sepolia testnet ETH ([get faucet](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/nft-minting-dapp.git
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app will be available at `http://localhost:5173`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+### Build for Production
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm run build
+npm run preview
 ```
+
+## 📝 Project Structure
+
+```
+src/
+├── components/     # React components (Header, NFTGallery, ClaimPanel, etc.)
+├── hooks/          # Custom hooks (useWallet, useClaim, useNFTBalance)
+├── lib/            # Configuration (wagmi, API, IPFS)
+├── types/          # TypeScript type definitions
+└── utils/          # Utility functions
+```
+
+## 🔗 Smart Contract
+
+The dApp interacts with an ERC-1155 NFT contract deployed on Base Sepolia testnet. The contract implements a free claiming mechanism with the following features:
+- Free minting (users only pay gas)
+- ERC-1155 standard for semi-fungible tokens
+- Safe transfer functionality
+
+## 📄 License
+
+MIT
